@@ -4,10 +4,8 @@ import random
 import numpy as np
 import time
 
-# Ініціалізація Pygame
 pygame.init()
 
-# Константи
 WIDTH, HEIGHT = 400, 400
 CELL_SIZE = 100
 AGENT_COLOR = (0, 255, 0)
@@ -15,7 +13,6 @@ TREASURE_COLOR = (255, 0, 0)
 HOLE_COLOR = (0, 0, 0)
 BG_COLOR = (255, 255, 255)
 
-# Початкові координати агента та скарбу
 treasure_position = [3, 3]
 
 # Ініціалізація Q-таблиці
@@ -115,21 +112,16 @@ for iteration in range(n):
         elif new_position == treasure_position:
             reward = reward_for_treasure
             print("Вітаємо! Ви знайшли скарб.")
-            print(f"Загальна к-сть очок агента: {agent_points}")
-            print(f"Винагорода за відвідування нової клітинки: {bonus_for_unvisited_cell}")
-            print(f"Вартість руху: {cost_of_movement}")
             total_time_spent += time.time() - iteration_start_time
             average_time_per_attempt = total_time_spent / total_attempts
-            print(f"Загальна кількість спроб: {total_attempts}")
             print(f"Загальний час пошуку шляху: {total_time_spent} секунд")
-            print(f"Середній час на одну спробу: {average_time_per_attempt} секунд")
             total_wins += 1
             total_points += agent_points
-            break  # Перериваємо основний цикл, щоб почати нову ітерацію
+            break  
 
         # Перевірка, чи агент не повторюється в одному і тому ж самому стані
         if new_position in memory:
-            reward = penalty_for_repeating_path  # Застереження за повторення шляху
+            reward = penalty_for_repeating_path  
             new_position = agent_position.copy()
         else:
             # Бонус за рух на невідвідану клітинку
@@ -176,27 +168,26 @@ for iteration in range(n):
         # Оновлення вікна
         pygame.display.flip()
 
-        # Затримка для кращого візуального відображення руху агента
+        # Затримка для агента
         pygame.time.delay(1)
 
         # Оновлення позиції агента
         agent_position = new_position.copy()
 
-# Виведення повідомлення, якщо скарб не знайдено
+
 if total_wins == 0:
     print("Агент не знайшов скарб в жодній ітерації.")
 else:
-    # Розрахунок середніх значень
+
     average_points = total_points / n
     average_time_spent = total_time_spent / n
     win_percentage = (total_wins / n) * 100
 
-    # Виведення результатів
+
     print("")
     print(f"Середня кількість очок: {average_points}")
     print(f"Середній час пошуку рішення: {average_time_spent} секунд")
     print(f"Відсоток перемог: {win_percentage}%")
 
-# Вихід з гри тільки після досягнення обмеження часу чи спроб, а не при знаходженні скарбу
 pygame.quit()
 sys.exit()
